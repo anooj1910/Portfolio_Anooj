@@ -4,7 +4,7 @@ import { FiPhone, FiMapPin, FiMail } from 'react-icons/fi'
 import SectionHeading from '../ui/SectionHeading'
 import { socialLinks } from '../../data/socials'
 import { profile } from '../../data/profile'
-import { useForm } from '@formspree/react'
+
 
 function FloatingInput({ id, label, type = 'text', as: Component = 'input', ...props }) {
   const [focused, setFocused] = useState(false)
@@ -57,9 +57,6 @@ function ValidationError({ prefix, field, errors }) {
 }
 
 export default function Contact() {
-  const [state, handleSubmit] = useForm(import.meta.env.VITE_FORMSPREE_FORM_ID)
-
-
   return (
     <section id="contact" className="section-padding relative">
       <div className="container-custom">
@@ -75,7 +72,8 @@ export default function Contact() {
           viewport={{ once: true }}
           className="grid lg:grid-cols-5 gap-10 lg:gap-12 items-start"
         >
-          <form onSubmit={handleSubmit} className="lg:col-span-3 space-y-5 w-full">
+          <form className="lg:col-span-3 space-y-5 w-full" onSubmit={(e) => e.preventDefault()}>
+
             <div className="grid sm:grid-cols-2 gap-5">
               <FloatingInput
                 id="name"
@@ -94,13 +92,7 @@ export default function Contact() {
               />
             </div>
 
-            {state.errors?.email?.length ? (
-              <ValidationError
-                prefix="Email"
-                field="email"
-                errors={state.errors}
-              />
-            ) : null}
+
 
             <FloatingInput
               id="subject"
@@ -120,31 +112,19 @@ export default function Contact() {
               placeholder=""
             />
 
-            {state.errors?.message?.length ? (
-              <ValidationError
-                prefix="Message"
-                field="message"
-                errors={state.errors}
-              />
-            ) : null}
+
 
             <motion.button
               type="submit"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              disabled={state.submitting || state.succeeded}
-              className="inline-flex min-h-12 w-full items-center justify-center rounded-full px-8 text-sm font-semibold text-white glass transition-colors hover:bg-white/10 sm:w-auto disabled:opacity-60"
+              className="inline-flex min-h-12 w-full items-center justify-center rounded-full px-8 text-sm font-semibold text-white glass transition-colors hover:bg-white/10 sm:w-auto"
             >
-              {state.submitting
-                ? 'Sending...'
-                : state.succeeded
-                  ? 'Message Sent'
-                  : 'Send Message'}
+              Send Message
             </motion.button>
 
-            <div aria-live="polite" className="min-h-5 text-sm text-emerald-300">
-              {state.succeeded ? <span>Message sent successfully!</span> : null}
-            </div>
+
+
           </form>
 
           <div className="lg:col-span-2 flex flex-col gap-5 lg:pt-2">
