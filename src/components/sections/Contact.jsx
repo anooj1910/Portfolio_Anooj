@@ -4,7 +4,7 @@ import { FiPhone, FiMapPin, FiMail } from 'react-icons/fi'
 import SectionHeading from '../ui/SectionHeading'
 import { socialLinks } from '../../data/socials'
 import { profile } from '../../data/profile'
-import { useForm, ValidationError } from '@formspree/react'
+import { useForm } from '@formspree/react'
 
 function FloatingInput({ id, label, type = 'text', as: Component = 'input', ...props }) {
   const [focused, setFocused] = useState(false)
@@ -41,8 +41,24 @@ function FloatingInput({ id, label, type = 'text', as: Component = 'input', ...p
   )
 }
 
+function ValidationError({ prefix, field, errors }) {
+  const messages = errors?.[field]
+  if (!messages?.length) return null
+
+  return (
+    <div className="text-sm text-rose-300">
+      {messages.map((msg, idx) => (
+        <div key={`${field}-${idx}`}>
+          {prefix}: {msg}
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export default function Contact() {
   const [state, handleSubmit] = useForm(import.meta.env.VITE_FORMSPREE_FORM_ID)
+
 
   return (
     <section id="contact" className="section-padding relative">
